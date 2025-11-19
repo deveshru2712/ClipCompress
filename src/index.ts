@@ -12,7 +12,7 @@ const program = new Command();
 let filepath = "";
 
 program
-  .command("test")
+  .command("compress")
   .description("A cli based video compressor")
   .action(() => {
     const rl = readline.createInterface({
