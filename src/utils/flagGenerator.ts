@@ -1,4 +1,4 @@
-const generateFFmpegFlags = (
+export const generateFFmpegFlags = (
   preset: VideoPreset,
   inputPath: string,
   outputPath: string

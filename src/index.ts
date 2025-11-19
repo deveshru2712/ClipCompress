@@ -41,7 +41,7 @@ program
     console.log(chalk.gray("Please enter the video file path:"));
     rl.prompt();
 
-    rl.on("line", (input) => {
+    rl.on("line", async (input) => {
       if (currentStep === "filepath") {
         // Validate file
         if (!validateVideoFile(input)) {
@@ -52,8 +52,9 @@ program
 
         filepath = input;
         console.log(chalk.green(`✓ Valid file: ${filepath}`));
-        console.log(chalk.gray("Now choose a preset by number (1-4):"));
+        console.log(chalk.gray("Now choose a preset by number (1-3):"));
         currentStep = "preset";
+        rl.prompt();
       } else if (currentStep === "preset") {
         // Handle preset selection
         const presetId = parseInt(input);
@@ -69,18 +70,28 @@ program
 
         console.log(chalk.green(`✓ Selected preset: ${selectedPreset.label}`));
         console.log(chalk.blue("Starting compression..."));
-        const ffmpegCommand = generateFFmpegCommand(
-          selectedPreset,
-          filepath,
-          "output.mp4"
+
+        console.log(
+          chalk.gray(
+            generateFFmpegCommand(selectedPreset, filepath, "output.mp4")
+          )
         );
 
-        compressVideo(ffmpegCommand);
+        try {
+          await compressVideo(filepath, "output.mp4", selectedPreset);
+          console.log(
+            chalk.green("✓ Compression complete! Saved to output.mp4")
+          );
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            console.error(chalk.red(`✗ Compression failed: ${error.message}`));
+          } else {
+            console.error(chalk.red(`✗ Compression failed: ${String(error)}`));
+          }
+        }
 
         rl.close();
       }
-
-      rl.prompt();
     });
   });
 
