@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "bin": {
-    "mycli": "dist/index.js"
+    "clip-compress": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
